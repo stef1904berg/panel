@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Daemon;
 
+use App\Enums\ServerState;
 use App\Models\Network;
-use App\Models\Node;
 use App\Models\Server;
 use GuzzleHttp\Exception\TransferException;
 use App\Exceptions\Http\Connection\DaemonConnectionException;
@@ -40,6 +40,11 @@ class DaemonNetworkRepository extends DaemonRepository
     public function joinNetwork(Network $network): void
     {
         Assert::isInstanceOf($this->server, Server::class);
+
+        // A server can only join a network if it is done installing, joining a network before that may de-sync
+        // The server_network table with the actual data from the daemon, leading in unwanted behaviour and falsy
+        // reporting a server has joined the network
+        Assert::true($this->server->status == ServerState::Normal);
 
         try {
             $this->getHttpClient()
