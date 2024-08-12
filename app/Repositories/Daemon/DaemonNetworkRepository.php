@@ -44,8 +44,7 @@ class DaemonNetworkRepository extends DaemonRepository
         try {
             $this->getHttpClient()
                 ->connectTimeout(5)
-                ->post("/api/servers/{$this->server->uuid}/networks/join")
-                ->json($network->getNetwork());
+                ->post("/api/servers/{$this->server->uuid}/networks/join", $network->getNetwork());
         } catch (TransferException $exception) {
             throw new DaemonConnectionException($exception);
         }
@@ -66,8 +65,7 @@ class DaemonNetworkRepository extends DaemonRepository
         try {
             $this->getHttpClient()
                 ->connectTimeout(5)
-                ->delete("/api/servers/{$this->server->uuid}/networks/leave")
-                ->json($network->getNetwork());
+                ->delete("/api/servers/{$this->server->uuid}/networks/leave", $network->getNetwork());
         } catch (TransferException $exception) {
             throw new DaemonConnectionException($exception);
         }

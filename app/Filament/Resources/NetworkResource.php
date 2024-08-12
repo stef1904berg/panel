@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\NetworkResource\Pages;
+use App\Filament\Resources\NetworkResource\RelationManagers\ServersRelationManager;
 use App\Models\Network;
 use Filament\Resources\Resource;
 
@@ -21,7 +22,7 @@ class NetworkResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ServersRelationManager::class
         ];
     }
 

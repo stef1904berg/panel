@@ -7,7 +7,6 @@ use App\Filament\Resources\NetworkResource;
 use App\Models\Network;
 use App\Services\Network\NetworkDeletionService;
 use Filament\Actions;
-use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -22,15 +21,20 @@ class EditNetwork extends EditRecord
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->prefix('pnw_')
                     ->maxLength(32)
                     ->minLength(2)
-                    ->required()
-                    ->helperText("Name of the docker network. Prefixed with 'pnw_' to be able to easily identify networks that belong to Pelican"),
+                    ->disabled(),
                 Select::make('driver')
                     ->options(NetworkDriver::class)
-                    ->required()
+                    ->prefixIcon('tabler-router')
+                    ->disabled()
                     ->label('Network driver'),
+                Select::make('node_id')
+                    ->label('Node')
+                    ->prefixIcon('tabler-server-2')
+                    ->relationship('node', 'name')
+                    ->preload()
+                    ->disabled()
             ]);
     }
 

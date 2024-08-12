@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\NetworkDriver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Network extends \Illuminate\Database\Eloquent\Model
 {
@@ -15,7 +16,7 @@ class Network extends \Illuminate\Database\Eloquent\Model
     protected $guarded = ['id'];
 
     public static array $validationRules = [
-        'name' => 'required|max:36|unique:networks,name',
+        'name'   => 'required|max:36|unique:networks,name',
         'driver' => 'required',
     ];
 
@@ -32,13 +33,21 @@ class Network extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
+     * Returns all the servers that joined the network
+     */
+    public function servers(): BelongsToMany
+    {
+        return $this->belongsToMany(Server::class, 'server_network');
+    }
+
+    /**
      * Returns the network as an array
      */
     public function getNetwork()
     {
         return [
-            'name' => $this->name,
-            'driver' => $this->driver,
+            'name'       => $this->name,
+            'driver'     => $this->driver,
             'network_id' => $this->network_id,
         ];
     }

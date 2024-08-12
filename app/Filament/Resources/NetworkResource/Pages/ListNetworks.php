@@ -19,8 +19,7 @@ class ListNetworks extends ListRecords
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('driver')->badge(),
-                TextColumn::make('node_id'),
-                TextColumn::make('network_id')->copyable(),
+                TextColumn::make('node.name'),
             ])
             ->filters([
                 //

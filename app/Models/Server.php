@@ -335,6 +335,13 @@ class Server extends Model
         return $this->morphToMany(ActivityLog::class, 'subject', 'activity_log_subjects');
     }
 
+    /**
+     * Returns all the networks the server has joined
+     */
+    public function networks() {
+        return $this->belongsToMany(Network::class, 'server_network');
+    }
+
     public function getRouteKeyName(): string
     {
         return 'id';
