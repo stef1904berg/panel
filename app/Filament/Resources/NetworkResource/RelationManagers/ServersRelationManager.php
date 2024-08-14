@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\NetworkResource\RelationManagers;
 
 use App\Models\Server;
-use App\Models\ServerNetwork;
 use App\Services\Servers\JoinNetworkService;
 use App\Services\Servers\LeaveNetworkService;
 use Filament\Forms;
@@ -43,7 +42,7 @@ class ServersRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
-                ->after(fn (Server $server) => resolve(LeaveNetworkService::class)->handle($server, $this->ownerRecord)),
+                    ->after(fn (Server $server) => resolve(LeaveNetworkService::class)->handle($server, $this->ownerRecord)),
             ])
             ->bulkActions([
                 Tables\Actions\DetachBulkAction::make(),

@@ -754,6 +754,7 @@ class EditServer extends EditRecord
     {
         return [
             ServerResource\RelationManagers\AllocationsRelationManager::class,
+            ServerResource\RelationManagers\NetworksRelationManager::class,
         ];
     }
 
