@@ -23,12 +23,9 @@ class CreateNetwork extends CreateRecord
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->prefix('pnw_')
-                    ->maxLength(32)
+                    ->maxLength(255)
                     ->minLength(2)
-                    ->required()
-                    ->hintIcon('tabler-question-mark')
-                    ->hintIconTooltip("Network names are prefixed with 'pnw_' to easily identify network names."),
+                    ->required(),
                 Select::make('driver')
                     ->options(NetworkDriver::class)
                     ->prefixIcon('tabler-router')
@@ -45,13 +42,6 @@ class CreateNetwork extends CreateRecord
                     ->required()
                     ->searchable(),
             ]);
-    }
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['name'] = 'pnw_' . $data['name'];
-
-        return $data;
     }
 
     protected function handleRecordCreation(array $data): Model

@@ -16,7 +16,7 @@ class Network extends \Illuminate\Database\Eloquent\Model
     protected $guarded = ['id'];
 
     public static array $validationRules = [
-        'name'   => 'required|max:36|unique:networks,name',
+        'name'   => 'required|max:255|unique:networks,name',
         'driver' => 'required',
     ];
 
