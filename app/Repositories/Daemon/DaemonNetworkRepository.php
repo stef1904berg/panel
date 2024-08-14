@@ -44,7 +44,8 @@ class DaemonNetworkRepository extends DaemonRepository
         // A server can only join a network if it is done installing, joining a network before that may de-sync
         // The server_network table with the actual data from the daemon, leading in unwanted behaviour and falsy
         // reporting a server has joined the network
-        Assert::true($this->server->status == ServerState::Normal);
+        // TODO: Actually make this work, or let the daemon handle it and return an error.
+        // Assert::true($this->server->status == ServerState::Normal);
 
         try {
             $this->getHttpClient()
