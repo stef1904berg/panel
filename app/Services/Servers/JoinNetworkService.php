@@ -3,6 +3,8 @@
 namespace App\Services\Servers;
 
 use App\Enums\NetworkDriver;
+use App\Exceptions\Http\Connection\DaemonConnectionException;
+use App\Exceptions\Http\DockerNetworkException;
 use App\Models\Network;
 use App\Models\Server;
 use App\Repositories\Daemon\DaemonNetworkRepository;
@@ -14,6 +16,10 @@ class JoinNetworkService
     ) {
     }
 
+    /**
+     * @throws DockerNetworkException
+     * @throws DaemonConnectionException
+     */
     public function handle(int|Server $server, int|Network $network): void
     {
         if (is_int($network)) {

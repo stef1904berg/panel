@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Daemon;
 
-use App\Enums\ServerState;
+use App\Exceptions\Http\DockerNetworkException;
 use App\Models\Network;
 use App\Models\Server;
 use GuzzleHttp\Exception\TransferException;
@@ -48,12 +48,17 @@ class DaemonNetworkRepository extends DaemonRepository
         // Assert::true($this->server->status == ServerState::Normal);
 
         try {
-            $this->getHttpClient()
+            $response = $this->getHttpClient()
                 ->connectTimeout(5)
                 ->post("/api/servers/{$this->server->uuid}/networks/join", $network->getNetwork());
         } catch (TransferException $exception) {
             throw new DaemonConnectionException($exception);
         }
+
+        if ($response->status() !== 200) {
+            throw new DockerNetworkException($response->json('message'));
+        }
+
     }
 
     /**
@@ -63,17 +68,22 @@ class DaemonNetworkRepository extends DaemonRepository
      * @return void
      * @throws DaemonConnectionException
      * @throws ConnectionException
+     * @throws DockerNetworkException
      */
     public function leaveNetwork(Network $network): void
     {
         Assert::isInstanceOf($this->server, Server::class);
 
         try {
-            $this->getHttpClient()
+            $response = $this->getHttpClient()
                 ->connectTimeout(5)
-                ->delete("/api/servers/{$this->server->uuid}/networks/leave", $network->getNetwork());
+                ->post("/api/servers/{$this->server->uuid}/networks/leave", $network->getNetwork());
         } catch (TransferException $exception) {
             throw new DaemonConnectionException($exception);
+        }
+
+        if ($response->status() !== 200) {
+            throw new DockerNetworkException($response->json('message'));
         }
     }
 }
