@@ -38,10 +38,12 @@ class ServersRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
+                    ->label("Join")
                     ->after(fn (Server $server) => resolve(JoinNetworkService::class)->handle($server, $this->ownerRecord)),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
+                    ->label("Leave")
                     ->after(fn (Server $server) => resolve(LeaveNetworkService::class)->handle($server, $this->ownerRecord)),
             ])
             ->bulkActions([
