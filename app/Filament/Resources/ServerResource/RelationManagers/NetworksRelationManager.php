@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ServerResource\RelationManagers;
 
+use App\Enums\NetworkDriver;
 use App\Exceptions\Http\DockerNetworkException;
-use App\Models\Network;
 use App\Services\Servers\JoinNetworkService;
 use App\Services\Servers\LeaveNetworkService;
 use Filament\Notifications\Notification;
@@ -13,7 +13,6 @@ use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 class NetworksRelationManager extends RelationManager
 {
@@ -33,6 +32,7 @@ class NetworksRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
+                    ->successNotificationTitle('Joined network')
                     ->attachAnother(false)
                     ->recordSelectOptionsQuery(fn(Builder $query) => $query->where('node_id', $this->ownerRecord->node_id)->orWhere('driver', NetworkDriver::Overlay))
                     ->label("Join network")
@@ -48,6 +48,7 @@ class NetworksRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\DetachAction::make()
                     ->label("Leave")
+                    ->successNotificationTitle("Left network")
                     ->before(function (DetachAction $action) {
                         try {
                             resolve(LeaveNetworkService::class)->handle($this->ownerRecord, $action->getRecord());
@@ -56,17 +57,6 @@ class NetworksRelationManager extends RelationManager
                             $action->cancel(true);
                         }
                     }),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make()
-                        ->label("Leave networks")
-                        ->after(function (Collection $networks) {
-                            $networks->each(
-                                fn(Network $network) => resolve(LeaveNetworkService::class)->handle($this->ownerRecord, $network)
-                            );
-                        }),
-                ]),
             ]);
     }
 }
