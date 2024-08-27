@@ -75,6 +75,7 @@ class ServerConfigurationStructureService
                 'id' => $server->egg->uuid,
                 'file_denylist' => $server->egg->inherit_file_denylist,
             ],
+            'networks' => $server->getNetworks(),
         ];
 
         if (!empty($server->docker_labels)) {

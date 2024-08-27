@@ -209,6 +209,11 @@ class Server extends Model
         })->toArray();
     }
 
+    public function getNetworks(): array
+    {
+        return $this->networks->pluck('network_id')->toArray();
+    }
+
     public function isInstalled(): bool
     {
         return $this->status !== ServerState::Installing && $this->status !== ServerState::InstallFailed;
