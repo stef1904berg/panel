@@ -53,6 +53,8 @@ use App\Exceptions\Http\Server\ServerStateConflictException;
  * @property \App\Models\Allocation|null $allocation
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Allocation[] $allocations
  * @property int|null $allocations_count
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Network[] $networks
+ * @property int|null $networks_count
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Backup[] $backups
  * @property int|null $backups_count
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Database[] $databases
